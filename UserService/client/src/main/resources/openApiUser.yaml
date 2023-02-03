@@ -1,0 +1,197 @@
+openapi: 3.0.0
+info:
+  title: user
+  description: Manipulating with user's data
+  version: '1.0'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  '/user/username/{username}':
+    get:
+      summary: User
+      description: Finding user with a username that has value 'name'
+      operationId: getUserByUsername
+      responses:
+        '200':
+          description: User by provided username retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBasic'
+      tags:
+        - User endpoints
+    parameters:
+      - schema:
+          type: string
+        name: username
+        in: path
+        required: true
+  '/user/name/{name}':
+    get:
+      summary: Users
+      tags:
+        - User endpoints
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserArrayResponse'
+      operationId: getUsersByName
+      description: Finding all users with a name that has value 'name'
+    parameters:
+      - schema:
+          type: string
+        name: name
+        in: path
+        required: true
+  /user:
+    post:
+      summary: ''
+      operationId: addUser
+      responses:
+        '200':
+          description: Successfully added
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+        description: User
+      tags:
+        - User endpoints
+      description: Adding user with data from Request Body
+    delete:
+      summary: ''
+      operationId: deleteUser
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: id
+      tags:
+        - User endpoints
+      description: Deleting user who has id sent in query
+    put:
+      summary: ''
+      operationId: updateUser
+      responses:
+        '200':
+          description: Successfully updated user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                gender:
+                  type: string
+                age:
+                  type: integer
+                username:
+                  type: string
+                password:
+                  type: string
+                courses:
+                  type: array
+                  items:
+                    type: string
+              x-examples:
+                Example 1:
+                  name: Jovana Jovanovic
+                  gender: female
+                  age: 5
+                  username: jovanovicj
+                  password: fsdfsfs
+                  courses:
+                    - '0'
+        description: User
+      tags:
+        - User endpoints
+      description: Updating user with data from Request Body
+components:
+  schemas:
+  
+    UserDto:
+      type: object
+      properties:
+        name:
+          type: string
+        gender:
+          type: string
+        age:
+          type: integer
+        username:
+          type: string
+        password:
+          type: string
+        courses:
+          type: array
+          items:
+            type: string
+      x-examples:
+        Example 1:
+          name: Jovana Jovanovic
+          gender: female
+          age: 5
+          username: jovanovicj
+          password: fsdfsfs
+          courses:
+            - '0'
+      x-stoplight:
+        id: 0baa1ba202b7c
+    UserBasic:
+      type: object
+      x-examples:
+        Example 1:
+          name: Jovana Jovanovic
+          username: jovanovicj
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+      x-stoplight:
+        id: 95f8ccf020e0f
+    UserDtoBasic:
+      type: object
+      properties:
+        name:
+          type: string
+        gender:
+          type: string
+        age:
+          type: integer
+        username:
+          type: string
+      x-examples:
+        Example 1:
+          name: Jovana Jovanovic
+          gender: female
+          age: 5
+          username: jovanovicj
+          password: fsdfsfs
+      x-stoplight:
+        id: 0baa1ba202b7c  
+    UserArrayResponse:
+      title: userResponse
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserBasic'
+        
+tags:
+  - name: User endpoints

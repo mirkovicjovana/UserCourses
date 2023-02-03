@@ -1,0 +1,194 @@
+openapi: 3.0.0
+info:
+  title: course
+  description: Manipulating with course's data
+  version: '1.0'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  '/course/name/{name}':
+    get:
+      summary: Course
+      description: Finding course with a name that has value 'name'
+      operationId: getCourseByName
+      responses:
+        '200':
+          description: Course by provided name retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseBasic'
+      tags:
+        - Course endpoints
+    parameters:
+      - schema:
+          type: string
+        name: name
+        in: path
+        required: true
+  '/course/id/{id}':
+    get:
+      summary: Course
+      description: Finding course with a id that has value 'id'
+      operationId: getCourseById
+      responses:
+        '200':
+          description: Course by provided id retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseBasic'
+      tags:
+        - Course endpoints
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+  '/course/professor/{professor}':
+    get:
+      summary: Courses
+      tags:
+        - Course endpoints
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseArrayResponse'
+      operationId: getCoursesByProffesor
+      description: Finding all courses from the professor
+    parameters:
+      - schema:
+          type: string
+        name: professor
+        in: path
+        required: true
+  /course:
+    post:
+      summary: ''
+      operationId: addCourse
+      responses:
+        '200':
+          description: Successfully added
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseDto'
+        description: Course
+      tags:
+        - Course endpoints
+      description: Adding course with data from Request Body
+    delete:
+      summary: ''
+      operationId: deleteCourse
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: id
+      tags:
+        - Course endpoints
+      description: Deleting course who has id sent in query
+    put:
+      summary: ''
+      operationId: updateCourse
+      responses:
+        '200':
+          description: Successfully updated course
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                professor:
+                  type: string
+                start:
+                  type: string
+                  description: Start date
+                  example: "01-01-2017"
+                  format: date
+                  pattern: "DD-MM-YYYY"
+                end:
+                  type: string
+                  description: End date
+                  example: "01-01-2017"
+                  format: date
+                  pattern: "DD-MM-YYYY"
+              x-examples:
+                Example 1:
+                  id: idcourse
+                  name: Java
+                  professor: Jovana Jovanovic
+                  start: 01-01-2017
+                  end: 02-01-2017
+                description: Course
+      tags:
+        - Course endpoints
+      description: Updating course with data from Request Body
+components:
+  schemas:
+  
+    CourseDto:
+      type: object
+      properties:
+        name:
+          type: string
+        professor:
+          type: string
+        start:
+          type: string
+          description: Start date
+          example: "01-01-2017"
+          format: date
+          pattern: "DD-MM-YYYY"
+        end:
+          type: string
+          description: End date
+          example: "01-01-2017"
+          format: date
+          pattern: "DD-MM-YYYY"
+      x-examples:
+        Example 1:
+          name: Java
+          professor: Jovana Jovanovic
+          start: 01-01-2017
+          end: 02-01-2017
+    CourseBasic:
+      type: object
+      x-examples:
+        Example 1:
+          name: Jovana Jovanovic
+          professor: jovanovicj
+      properties:
+        name:
+          type: string
+        professor:
+          type: string
+    CourseArrayResponse:
+      title: courseArrayResponse
+      type: object
+      properties:
+        courses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseBasic'
+        
+tags:
+  - name: Course endpoints
